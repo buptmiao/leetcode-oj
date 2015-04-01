@@ -37,4 +37,3 @@ public:
 		return s.substr((center-1-maxlen) / 2,maxlen);
 	}
 };
-	
