@@ -25,7 +25,7 @@ target = 13
 Output: false
  */
 func searchMatrix(matrix [][]int, target int) bool {
-	if len(matrix) == 0 {
+	if len(matrix) == 0 || len(matrix[0]) == 0 {
 		return false
 	}
 	cols := len(matrix[0])
