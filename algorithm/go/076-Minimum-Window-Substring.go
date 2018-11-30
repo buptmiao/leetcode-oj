@@ -12,50 +12,32 @@ If there is such window, you are guaranteed that there will always be only one u
 
 */
 func minWindow(s string, t string) string {
-	left, start, count, minwin := -1, 0, len(t), len(s)
+	left, start, count, minwin := 0, 0, len(t), len(s) + 1
 	sb, tb := []byte(s), []byte(t)
-	circle, tmap := make([]int, 128), make([]int, 128)
+	tmap := make([]int, 128)
 	for _, c := range tb {
 		tmap[c] += 1
 	}
 	for i, v := range sb {
-		if tmap[v] == 0 {
-			continue
-		}
-		if left == -1 {
-			left, start = i, i
-		}
-		if tmap[v] > circle[v] {
+		if tmap[v] > 0 {
 			count -= 1
 		}
-		circle[v] += 1
-		if count == 0 {
-			minwin = i - left + 1
-			start = left
-			count = -1
-		}
-		if circle[v] > tmap[v] && v == sb[left] {
-			circle[v] -= 1
-			for j := left+1; j <= i; j++ {
-				u := sb[j]
-				if tmap[u] == 0 {
-					continue
-				}
-				if u == v || circle[u] <= tmap[u] {
-					left = j
-					if count == -1 && i - j + 1 < minwin {
-						minwin = i - j + 1
-						start = j
-					}
-					break
-				} else {
-					circle[u] -= 1
-				}
+		tmap[v] -= 1
+		for count == 0 {
+			if i - left + 1 < minwin {
+				minwin = i - left + 1
+				start = left
 			}
+			if tmap[sb[left]] == 0 {
+				count += 1
+			}
+			tmap[sb[left]] += 1
+			left += 1
 		}
+
 	}
-	if count == -1 {
-		return string(sb[start:start + minwin])
+	if minwin == len(s) + 1 {
+		return ""
 	}
-	return ""
+	return string(sb[start:start + minwin])
 }
