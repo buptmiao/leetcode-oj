@@ -29,3 +29,36 @@ func isSymmetricBoth(left, right *TreeNode) bool {
 
 	return left.Val == right.Val && isSymmetricBoth(left.Left, right.Right) && isSymmetricBoth(left.Right, right.Left)
 }
+
+// solution 2
+func isSymmetric(root *TreeNode) bool {
+	if root == nil {
+		return true
+	}
+	left, right := list.New(), list.New()
+
+	left.PushBack(root.Left)
+	right.PushBack(root.Right)
+
+	for left.Len() > 0 && right.Len() > 0 {
+		p, q := left.Front(), right.Front()
+		left.Remove(p)
+		right.Remove(q)
+
+		pnode, qnode := p.Value.(*TreeNode), q.Value.(*TreeNode)
+
+		if pnode == nil && qnode == nil {
+			continue
+		}
+
+		if pnode == nil || qnode == nil || pnode.Val != qnode.Val {
+			return false
+		}
+
+		left.PushBack(pnode.Left)
+		left.PushBack(pnode.Right)
+		right.PushBack(qnode.Right)
+		right.PushBack(qnode.Left)
+	}
+	return true
+}
