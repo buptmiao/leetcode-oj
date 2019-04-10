@@ -39,23 +39,21 @@ babgbag
     ^^^
  */
 func numDistinct(s string, t string) int {
-	dp := make([][]int, len(t) + 1)
-	for i := range dp {
-		dp[i] = make([]int, len(s)+ 1)
-	}
-
+	dp := make([]int, len(s) + 1)
 	for i := 0; i <= len(s); i++ {
-		dp[0][i] = 1
+		dp[i] = 1
 	}
-
+	last := 1
 	for i := 1; i <= len(t); i++ {
+		dp[len(s)] = last
+		last = 0
 		for j := i; j <= len(s); j++ {
 			if s[j-1] == t[i-1] {
-				dp[i][j] = dp[i][j-1] + dp[i-1][j-1]
+				last, dp[j-1] = last + dp[j-1], last
 			} else {
-				dp[i][j] = dp[i][j-1]
+				dp[j-1] = last
 			}
 		}
 	}
-	return dp[len(t)][len(s)]
+	return last
 }
